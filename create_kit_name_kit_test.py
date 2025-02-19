@@ -11,11 +11,12 @@ def get_user_body(first_name):
 def positive_assert(first_name):
     user_body = get_user_body(first_name)
     user_response = sender_stand_request.post_new_user(user_body)
-
+#Correccion solicitada "Para cada prueba positiva, asegúrate de validar que el status code sea 2XX y que el campo name en la respuesta coincida con el valor utilizado en la prueba
     assert user_response.status_code == 201
-    assert user_response.json()["authToken"] != ""
+    assert user_response.json()["code"] == 201
+    assert user_response.json()["message"] == 'El campo "name" del cuerpo de la respuesta coincide con el campo "name" del cuerpo de la solicitud'
 
-#comprobar si hay un registro de creación de un nuevo usuario guardado en la tabla users
+    #comprobar si hay un registro de creación de un nuevo usuario guardado en la tabla users
     users_table_response = sender_stand_request.get_users_table()
     str_user = user_body["firstName"] + "," + user_body["phone"] + "," \
                + user_body["address"] + ",,," + user_response.json()["authToken"]
