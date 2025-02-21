@@ -1,20 +1,19 @@
 import sender_stand_request
 import data
 
-# esta función cambia los valores en el parámetro "firstName"
 def get_user_body(first_name):
     current_body = data.user_body.copy()
     current_body["firstName"] = first_name
     return current_body
 
-# Función de prueba positiva
-def positive_assert(first_name):
-    user_body = get_user_body(first_name)
-    user_response = sender_stand_request.post_new_user(user_body)
-#Correccion solicitada "Para cada prueba positiva, asegúrate de validar que el status code sea 2XX y que el campo name en la respuesta coincida con el valor utilizado en la prueba
+def positive_assert(kit_body):
+    user_body = get_user_body(kit_body)
+    user_response = sender_stand_request.post_new_client_kits(kit_body)
+
     assert user_response.status_code == 201
-    assert user_response.json()["code"] == 201
-    assert user_response.json()["message"] == 'El campo "name" del cuerpo de la respuesta coincide con el campo "name" del cuerpo de la solicitud'
+    assert user_response.json()['name'] == kit_body['name']
+    assert user_response.json()['name'] == 'El campo "name" del cuerpo de la respuesta coincide con el campo "name" del cuerpo de la solicitud'
+    print(user_response.json())
 
     #comprobar si hay un registro de creación de un nuevo usuario guardado en la tabla users
     users_table_response = sender_stand_request.get_users_table()
